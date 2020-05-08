@@ -16,20 +16,20 @@ public class TestController {
         return "Public Content.";
     }
 
-    @GetMapping("/user")
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    @GetMapping("/driver")
+    @PreAuthorize("hasAuthority('DRIVER') or hasAuthority('DISPATCHER') or hasAuthority('ADMIN')")
     public String userAccess() {
         return "User Content.";
     }
 
-    @GetMapping("/mod")
-    @PreAuthorize("hasRole('MODERATOR')")
-    public String moderatorAccess() {
+    @GetMapping("/dispatcher")
+    @PreAuthorize("hasAuthority('DISPATCHER')")
+    public String dispatcherAccess() {
         return "Moderator Board.";
     }
 
     @GetMapping("/admin")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public String adminAccess() {
         return "Admin Board.";
     }

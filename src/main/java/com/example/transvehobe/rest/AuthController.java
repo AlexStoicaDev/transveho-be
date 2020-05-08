@@ -62,7 +62,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
-        
+
        if(userRepository.findByUsernameOrEmail(signUpRequest.getUsername(),signUpRequest.getEmail()).isPresent()){
            return ResponseEntity
                .badRequest()

@@ -6,9 +6,3 @@ create table users (
     username varchar(20) not null unique,
     primary key (id)
 )
-
--- alter table users
---    add constraint UKr43af9ap4edm43mmtq01oddj6 unique (username)
---
--- alter table users
---    add constraint UK6dotkott2kjsp8vw4d0m25fb7 unique (email)

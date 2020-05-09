@@ -60,6 +60,7 @@ public class AuthController {
                                                  roles));
     }
 
+    //TODO move code to user service
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
 

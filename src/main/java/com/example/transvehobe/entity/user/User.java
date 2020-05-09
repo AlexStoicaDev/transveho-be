@@ -1,5 +1,8 @@
 package com.example.transvehobe.entity.user;
 
+import com.example.transvehobe.common.enums.Language;
+import com.example.transvehobe.common.enums.UserStatus;
+import com.example.transvehobe.entity.drivingLicense.DrivingLicenseCategory;
 import com.example.transvehobe.entity.role.UserRole;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -12,16 +15,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-
-//
-//uniqueConstraints = {
-//@UniqueConstraint(columnNames = "username"),
-//@UniqueConstraint(columnNames = "email")
-//       }
 
 @Data
 @Entity
@@ -40,7 +36,7 @@ public class User {
 
     @Email
     @NotBlank
-    @Size(max = 50)
+    @Size(max = 20)
     private String email;
 
     @NotBlank
@@ -49,4 +45,22 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     private UserRole role;
+
+    @Size(max = 12)
+    private String lastName;
+
+    @Size(max = 120)
+    private String firstName;
+
+    @Size(max = 12)
+    private String phoneNumber;
+
+    @Enumerated(EnumType.STRING)
+    private UserStatus userStatus;
+
+    @Enumerated(EnumType.STRING)
+    private DrivingLicenseCategory drivingLicenseCategory;
+
+    @Enumerated(EnumType.STRING)
+    private Language spokenLanguage;
 }

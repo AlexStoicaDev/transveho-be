@@ -11,7 +11,7 @@
     <groupId>com.example</groupId>
     <artifactId>transvehobe</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>transvehobe</name>
+    <name>transveho</name>
     <description>Backend for travel web app Transveho</description>
 
     <properties>

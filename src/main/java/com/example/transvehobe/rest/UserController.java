@@ -9,6 +9,7 @@ import com.example.transvehobe.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -26,6 +28,7 @@ import javax.persistence.EntityNotFoundException;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/transveho/users")
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class UserController {
 
     private final UserService userService;
@@ -64,10 +67,12 @@ public class UserController {
                           .collect(Collectors.toList());
     }
 
-    @PutMapping("/update/{username}")
+    @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN') or #username == authentication.name")
-    public UserProjection updateUser(@PathVariable("username") String username, @RequestBody UserDto userDto) {
-        return factory.createProjection(UserProjection.class, userService.updateUser(username, userDto));
+    public UserProjection updateUser(@PathVariable(value = "id") Long id,
+                                     @RequestParam(value = "username") String username,
+                                     @RequestBody UserDto userDto) {
+        return factory.createProjection(UserProjection.class, userService.updateUser(id, userDto));
     }
 
     @PostMapping()

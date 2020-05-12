@@ -36,17 +36,23 @@ public class Mapper {
         if (userDto.getUserStatus() != null) {
             user.setUserStatus(UserStatus.valueOf(userDto.getUserStatus()));
         }
-        if (userDto.getPhoneNumber() != null) {
+        if (userDto.getPhoneNumber() != null && !userDto.getPhoneNumber().equals("")) {
             user.setPhoneNumber(userDto.getPhoneNumber());
         }
-        if (userDto.getFirstName() != null) {
+        if (userDto.getFirstName() != null && !userDto.getFirstName().equals("")) {
             user.setFirstName(userDto.getFirstName());
         }
-        if (userDto.getLastName() != null) {
+        if (userDto.getLastName() != null && !userDto.getLastName().equals("")) {
             user.setLastName(userDto.getLastName());
         }
         if (userDto.getRole() != null) {
             user.setRole(UserRole.valueOf(userDto.getRole()));
+        }
+        if (userDto.getEmail() != null && !userDto.getEmail().equals("")) {
+            user.setEmail(userDto.getEmail());
+        }
+        if (userDto.getUsername() != null && !userDto.getUsername().equals("")) {
+            user.setUsername(userDto.getUsername());
         }
         return user;
     }

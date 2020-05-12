@@ -43,11 +43,12 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public User updateUser(String username, UserDto userDto) {
-        final Optional<User> byUsername = userRepository.findByUsername(username);
+    //TODO fix bug, fe receives result even with error
+    public User updateUser(Long id, UserDto userDto) {
+        final Optional<User> byUsername = userRepository.findById(id);
         if (byUsername.isPresent()) {
             userRepository.save(Mapper.updateUser(byUsername.get(), userDto));
-            return userRepository.findByUsername(username)
+            return userRepository.findById(id)
                                  .orElseThrow(() -> new EntityNotFoundException("driver with" + userDto.getUsername() + " was not found"));
         } else {
             throw new EntityNotFoundException("driver with" + userDto.getUsername() + " was not found");

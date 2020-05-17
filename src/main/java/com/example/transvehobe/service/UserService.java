@@ -19,8 +19,8 @@ import javax.transaction.Transactional;
 @RequiredArgsConstructor
 public class UserService {
 
+    private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
-    private final PasswordEncoder encoder;
 
     //TODO create custom exceptions
     public Optional<User> getUserById(Long id) {
@@ -43,6 +43,10 @@ public class UserService {
         return userRepository.findAll();
     }
 
+    public List<User> getAllDispatchers() {
+        return userRepository.findAllByRole(UserRole.DISPATCHER);
+    }
+
     //TODO fix bug, fe receives result even with error
     public User updateUser(Long id, UserDto userDto) {
         final Optional<User> byUsername = userRepository.findById(id);
@@ -56,10 +60,10 @@ public class UserService {
     }
 
     public User createUser(UserDto userDto) {
-        userDto.setPassword(encoder.encode(userDto.getPassword()));
-        User driver = Mapper.mapUserDtoToUserEntity(userDto);
-        userRepository.save(driver);
-        return driver;
+        User newUser = Mapper.updateUser(new User(), userDto);
+        newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
+        userRepository.save(newUser);
+        return newUser;
     }
 
     //TODO change logic to a more safe one, also remove drriver from assigned trips if necessary
@@ -67,5 +71,4 @@ public class UserService {
     public void deleteUser(String username) {
         userRepository.deleteByUsername(username);
     }
-
 }

@@ -58,6 +58,15 @@ public class UserController {
                           .collect(Collectors.toList());
     }
 
+    @GetMapping("/dispatchers")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('DISPATCHER')")
+    public List<UserProjection> getAllDispatchers() {
+        return userService.getAllDispatchers()
+                          .stream()
+                          .map(user -> factory.createProjection(UserProjection.class, user))
+                          .collect(Collectors.toList());
+    }
+
     @GetMapping("/all")
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('DISPATCHER')")
     public List<UserProjection> getAllUsers() {
@@ -78,6 +87,8 @@ public class UserController {
     @PostMapping()
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> createUser(@RequestBody UserDto userDto) {
+        //TODO send password via email and let driver change it
+        userDto.setPassword("1234567");
         if (userService.findUserByUsernameOrEmail(userDto.getUsername(), userDto.getEmail()).isPresent()) {
             return ResponseEntity
                 .badRequest()

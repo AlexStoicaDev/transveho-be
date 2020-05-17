@@ -11,21 +11,6 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class Mapper {
 
-    public User mapUserDtoToUserEntity(UserDto userDto) {
-        User newUser = new User();
-        newUser.setDrivingLicenseCategory(DrivingLicenseCategory.valueOf(userDto.getDrivingLicenseCategory()));
-        newUser.setSpokenLanguage(Language.valueOf(userDto.getSpokenLanguage()));
-        newUser.setLastName(userDto.getLastName());
-        newUser.setFirstName(userDto.getFirstName());
-        newUser.setPhoneNumber(userDto.getPhoneNumber());
-        newUser.setUserStatus(UserStatus.Available);
-        newUser.setUsername(userDto.getUsername());
-        newUser.setPassword(userDto.getPassword());
-        newUser.setEmail(userDto.getEmail());
-        newUser.setRole(UserRole.valueOf(userDto.getRole()));
-        return newUser;
-    }
-
     public User updateUser(User user, UserDto userDto) {
         if (userDto.getSpokenLanguage() != null) {
             user.setSpokenLanguage(Language.valueOf(userDto.getSpokenLanguage()));
@@ -53,6 +38,9 @@ public class Mapper {
         }
         if (userDto.getUsername() != null && !userDto.getUsername().equals("")) {
             user.setUsername(userDto.getUsername());
+        }
+        if (userDto.getPassword() != null && !userDto.getPassword().equals("")) {
+            user.setPassword(userDto.getPassword());
         }
         return user;
     }

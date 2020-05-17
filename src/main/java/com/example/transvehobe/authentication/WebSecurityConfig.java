@@ -55,7 +55,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
             .authorizeRequests().antMatchers("/transveho/auth/**").permitAll()
-            .antMatchers("/transveho/test/**").permitAll()
+            .antMatchers("/transveho/cars/**").authenticated()
             .antMatchers("/transveho/users/**").authenticated()
             .anyRequest().authenticated();
 

@@ -12,4 +12,23 @@ create table users (
     driving_license_category varchar(255),
 
     primary key (id)
-)
+);
+
+create table cars (
+    id bigint not null auto_increment,
+    chassis_number varchar(255) not null unique,
+    engine_type varchar(255),
+    huvignette_expiration_date date,
+    is_in_transit bit not null default false,
+    is_rented bit not null,
+    itp_expiration_date date,
+    model varchar(10),
+    number_of_seats integer,
+    others varchar(255),
+    plate_number varchar(10) not null unique,
+    rca_expiration_date date,
+    rovignette_expiration_date date,
+    status varchar(255),
+
+    primary key (id)
+);

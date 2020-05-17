@@ -17,7 +17,7 @@ import javax.transaction.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class UsersService {
 
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
@@ -47,23 +47,24 @@ public class UserService {
         return userRepository.findAllByRole(UserRole.DISPATCHER);
     }
 
+    public User createUser(UserDto userDto) {
+        User newUser = Mapper.updateUser(new User(), userDto);
+        newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
+        userRepository.save(newUser);
+        return userRepository.findByUsername(newUser.getUsername())
+                             .orElseThrow(() -> new EntityNotFoundException("user with username: " + userDto.getUsername() + " was not found in db"));
+    }
+
     //TODO fix bug, fe receives result even with error
     public User updateUser(Long id, UserDto userDto) {
         final Optional<User> byUsername = userRepository.findById(id);
         if (byUsername.isPresent()) {
             userRepository.save(Mapper.updateUser(byUsername.get(), userDto));
             return userRepository.findById(id)
-                                 .orElseThrow(() -> new EntityNotFoundException("driver with" + userDto.getUsername() + " was not found"));
+                                 .orElseThrow(() -> new EntityNotFoundException("user with username:" + userDto.getUsername() + " was not found in db"));
         } else {
             throw new EntityNotFoundException("driver with" + userDto.getUsername() + " was not found");
         }
-    }
-
-    public User createUser(UserDto userDto) {
-        User newUser = Mapper.updateUser(new User(), userDto);
-        newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
-        userRepository.save(newUser);
-        return newUser;
     }
 
     //TODO change logic to a more safe one, also remove drriver from assigned trips if necessary

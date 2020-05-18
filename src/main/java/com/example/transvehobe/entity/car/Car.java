@@ -34,7 +34,7 @@ public class Car {
     private String plateNumber;
 
     @NotBlank
-    @Size(max = 10)
+    @Size(max = 255)
     private String model;
 
     private Integer numberOfSeats;

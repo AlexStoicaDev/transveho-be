@@ -22,7 +22,7 @@ create table cars (
     is_in_transit bit not null default false,
     is_rented bit not null,
     itp_expiration_date date,
-    model varchar(10),
+    model varchar(255),
     number_of_seats integer,
     others varchar(255),
     plate_number varchar(10) not null unique,

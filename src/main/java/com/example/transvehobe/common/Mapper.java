@@ -1,6 +1,7 @@
 package com.example.transvehobe.common;
 
 import com.example.transvehobe.common.dto.CarDto;
+import com.example.transvehobe.common.dto.RouteDto;
 import com.example.transvehobe.common.dto.UserDto;
 import com.example.transvehobe.common.enums.CarStatus;
 import com.example.transvehobe.common.enums.EngineType;
@@ -9,6 +10,7 @@ import com.example.transvehobe.common.enums.UserStatus;
 import com.example.transvehobe.entity.car.Car;
 import com.example.transvehobe.entity.drivingLicense.DrivingLicenseCategory;
 import com.example.transvehobe.entity.role.UserRole;
+import com.example.transvehobe.entity.route.Route;
 import com.example.transvehobe.entity.user.User;
 import lombok.experimental.UtilityClass;
 
@@ -86,5 +88,28 @@ public class Mapper {
             car.setOthers(carDto.getOthers());
         }
         return car;
+    }
+
+    public Route updateRoute(Route route, RouteDto routeDto) {
+
+        if (routeDto.getToLocation() != null && !routeDto.getToLocation().equals("")) {
+            route.setToLocation(routeDto.getToLocation());
+        }
+        if (routeDto.getFromLocation() != null && !routeDto.getFromLocation().equals("")) {
+            route.setFromLocation(routeDto.getFromLocation());
+        }
+        if (routeDto.getDistanceInKm() != null && routeDto.getDistanceInKm() > 0) {
+            route.setDistanceInKm(routeDto.getDistanceInKm());
+        }
+        if (routeDto.getPriceInRon() != null && routeDto.getPriceInRon() > 0) {
+            route.setPriceInRon(routeDto.getPriceInRon());
+        }
+        if (routeDto.getPriceInEur() != null && routeDto.getPriceInEur() > 0) {
+            route.setPriceInEur(routeDto.getPriceInEur());
+        }
+        if (routeDto.getNotes() != null && !routeDto.getNotes().equals("")) {
+            route.setNotes(routeDto.getNotes());
+        }
+        return route;
     }
 }

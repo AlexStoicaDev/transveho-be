@@ -1,7 +1,6 @@
 package com.example.transvehobe.authentication;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -28,11 +27,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserDetailsServiceImpl userDetailsService;
     private final AuthEntryPointJwt unauthorizedHandler;
 
-    @Bean
-    public AuthTokenFilter authenticationJwtTokenFilter() {
-        return new AuthTokenFilter(jwtUtils,userDetailsService);
-    }
-
     @Override
     public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
         authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
@@ -44,11 +38,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
+    //TODO remoe transveho from urls and also authorization is already added using .anyRequest().authenticated();
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
@@ -57,8 +47,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .authorizeRequests().antMatchers("/transveho/auth/**").permitAll()
             .antMatchers("/transveho/cars/**").authenticated()
             .antMatchers("/transveho/users/**").authenticated()
+            .antMatchers("/transveho/routes/**").permitAll()
             .anyRequest().authenticated();
 
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+    }
+
+    @Bean
+    public AuthTokenFilter authenticationJwtTokenFilter() {
+        return new AuthTokenFilter(jwtUtils, userDetailsService);
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }

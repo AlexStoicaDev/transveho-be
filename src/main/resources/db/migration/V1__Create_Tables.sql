@@ -32,3 +32,15 @@ create table cars (
 
     primary key (id)
 );
+
+create table routes (
+        id bigint not null auto_increment,
+        distance_in_km integer,
+        from_location varchar(120),
+        notes varchar(255),
+        price_in_eur integer,
+        price_in_ron integer,
+        to_location varchar(120),
+        return_route_id bigint,
+        primary key (id)
+)

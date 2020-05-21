@@ -12,5 +12,6 @@ public class RouteDto {
     private Integer distanceInKm;
     private Integer priceInRon;
     private Integer priceInEur;
+    private boolean transitRoute;
     private String notes;
 }

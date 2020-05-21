@@ -1,7 +1,7 @@
 package com.example.transvehobe.service;
 
-import com.example.transvehobe.common.Mapper;
 import com.example.transvehobe.common.dto.CarDto;
+import com.example.transvehobe.common.mappers.CarMapper;
 import com.example.transvehobe.entity.car.Car;
 import com.example.transvehobe.entity.car.CarRepository;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +27,7 @@ public class CarsService {
     }
 
     public Optional<Car> createCar(CarDto carDto) {
-        Car newCar = Mapper.updateCar(new Car(), carDto);
+        Car newCar = CarMapper.mapCarDtoToCarEntity(new Car(), carDto);
         carRepository.save(newCar);
         return carRepository.findByPlateNumber(newCar.getPlateNumber());
     }
@@ -36,7 +36,7 @@ public class CarsService {
         Car oldCar = carRepository.findByPlateNumber(plateNumber).orElseThrow(() -> new EntityNotFoundException("car with plate number: "
                                                                                                                     + plateNumber
                                                                                                                     + " was not found in db"));
-        Car updatedCar = Mapper.updateCar(oldCar, carDto);
+        Car updatedCar = CarMapper.mapCarDtoToCarEntity(oldCar, carDto);
         carRepository.save(updatedCar);
         return carRepository.findByPlateNumber(updatedCar.getPlateNumber());
     }

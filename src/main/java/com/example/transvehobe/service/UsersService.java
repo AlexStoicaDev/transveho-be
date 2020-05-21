@@ -1,7 +1,7 @@
 package com.example.transvehobe.service;
 
-import com.example.transvehobe.common.Mapper;
 import com.example.transvehobe.common.dto.UserDto;
+import com.example.transvehobe.common.mappers.UserMapper;
 import com.example.transvehobe.entity.role.UserRole;
 import com.example.transvehobe.entity.user.User;
 import com.example.transvehobe.entity.user.UserRepository;
@@ -48,20 +48,22 @@ public class UsersService {
     }
 
     public User createUser(UserDto userDto) {
-        User newUser = Mapper.updateUser(new User(), userDto);
+        User newUser = UserMapper.mapUserDtoToUserEntity(new User(), userDto);
         newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
         userRepository.save(newUser);
         return userRepository.findByUsername(newUser.getUsername())
-                             .orElseThrow(() -> new EntityNotFoundException("user with username: " + userDto.getUsername() + " was not found in db"));
+                             .orElseThrow(() -> new EntityNotFoundException(
+                                 "user with username: " + userDto.getUsername() + " was not found in db"));
     }
 
     //TODO fix bug, fe receives result even with error
     public User updateUser(Long id, UserDto userDto) {
         final Optional<User> byUsername = userRepository.findById(id);
         if (byUsername.isPresent()) {
-            userRepository.save(Mapper.updateUser(byUsername.get(), userDto));
+            userRepository.save(UserMapper.mapUserDtoToUserEntity(byUsername.get(), userDto));
             return userRepository.findById(id)
-                                 .orElseThrow(() -> new EntityNotFoundException("user with username:" + userDto.getUsername() + " was not found in db"));
+                                 .orElseThrow(() -> new EntityNotFoundException(
+                                     "user with username:" + userDto.getUsername() + " was not found in db"));
         } else {
             throw new EntityNotFoundException("driver with" + userDto.getUsername() + " was not found");
         }

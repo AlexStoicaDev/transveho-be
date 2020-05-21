@@ -18,6 +18,7 @@ import javax.validation.constraints.Size;
 
 //TODO create an entity for Location so the users can create new locations and also create a price entity to have different prices
 // the route entity should have a set of prices that have a price typpe (shuttle/private/child, etc)
+//TODO add isTransitRoute
 @Data
 @Entity
 @ToString(of = {"id"})
@@ -44,6 +45,12 @@ public class Route {
     private Integer priceInRon;
     private Integer priceInEur;
 
+    private boolean isTransitRoute;
+
     @Size(max = 255)
     private String notes;
+
+    //    @JsonIgnore
+    //    @OneToMany(mappedBy = "route")
+    //    private List<Passenger> passengers;
 }

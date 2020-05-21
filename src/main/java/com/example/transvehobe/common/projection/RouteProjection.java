@@ -10,7 +10,7 @@ public interface RouteProjection {
     Long getId();
 
     @Value("#{target.returnRoute?.id}")
-    Long getReturnRouteId();
+    Long getReturnRoute();
 
     String getToLocation();
 
@@ -21,6 +21,8 @@ public interface RouteProjection {
     Integer getPriceInRon();
 
     Integer getPriceInEur();
+
+    boolean isTransitRoute();
 
     String getNotes();
 }

@@ -1,7 +1,7 @@
 package com.example.transvehobe.service;
 
-import com.example.transvehobe.common.Mapper;
 import com.example.transvehobe.common.dto.RouteDto;
+import com.example.transvehobe.common.mappers.RoutesMapper;
 import com.example.transvehobe.entity.route.Route;
 import com.example.transvehobe.entity.route.RouteRepository;
 import lombok.RequiredArgsConstructor;
@@ -27,14 +27,14 @@ public class RoutesService {
     }
 
     public Route createRoute(RouteDto routeDto) {
-        Route newRoute = Mapper.updateRoute(new Route(), routeDto);
+        Route newRoute = RoutesMapper.mapRouteDtoToRouteEntity(new Route(), routeDto);
         newRoute.setReturnRoute(createReturnRoute(newRoute, routeDto));
         routeRepository.save(newRoute);
         return newRoute;
     }
 
     private Route createReturnRoute(Route route, RouteDto routeDto) {
-        Route newReturnRoute = Mapper.updateRoute(new Route(), switchLocationsForReturnRoute(routeDto));
+        Route newReturnRoute = RoutesMapper.mapRouteDtoToRouteEntity(new Route(), switchLocationsForReturnRoute(routeDto));
         newReturnRoute.setReturnRoute(route);
         return newReturnRoute;
     }
@@ -51,7 +51,7 @@ public class RoutesService {
                                         .orElseThrow(() -> new EntityNotFoundException(
                                             "Route with id: " + routeDto.getId() + " was not found in db"));
 
-        Route updatedRoute = Mapper.updateRoute(oldRoute, routeDto);
+        Route updatedRoute = RoutesMapper.mapRouteDtoToRouteEntity(oldRoute, routeDto);
         Route updatedReturnRoute = updateReturnRoute(updatedRoute.getReturnRoute(), routeDto);
         updatedRoute.setReturnRoute(updatedReturnRoute);
         routeRepository.save(updatedRoute);
@@ -60,7 +60,7 @@ public class RoutesService {
     }
 
     public Route updateReturnRoute(Route returnRoute, RouteDto routeDto) {
-        return Mapper.updateRoute(returnRoute, switchLocationsForReturnRoute(routeDto));
+        return RoutesMapper.mapRouteDtoToRouteEntity(returnRoute, switchLocationsForReturnRoute(routeDto));
     }
 
     public void deleteRoute(Long routeId) {

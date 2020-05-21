@@ -100,3 +100,13 @@ insert into CARS (id, chassis_number, engine_type, huvignette_expiration_date, i
 insert into CARS (id, chassis_number, engine_type, huvignette_expiration_date, is_in_transit, is_rented, itp_expiration_date, model, number_of_seats, others, plate_number, rca_expiration_date, rovignette_expiration_date, status) values (48, 48, 'BioDiesel', '2021-03-01', true, true, '2021-03-01', 'New Yorker', 7, 'Nunc purus.', 'TM 48 NFS', '2021-03-01', '2021-03-01', 'Available');
 insert into CARS (id, chassis_number, engine_type, huvignette_expiration_date, is_in_transit, is_rented, itp_expiration_date, model, number_of_seats, others, plate_number, rca_expiration_date, rovignette_expiration_date, status) values (49, 49, 'BioDiesel', '2021-03-01', true, true, '2021-03-01', 'Avalanche 1500', 4, 'Etiam faucibus cursus urna.', 'TM 49 NFS', '2021-03-01', '2021-03-01', 'Defective');
 insert into CARS (id, chassis_number, engine_type, huvignette_expiration_date, is_in_transit, is_rented, itp_expiration_date, model, number_of_seats, others, plate_number, rca_expiration_date, rovignette_expiration_date, status) values (50, 50, 'Electric', '2021-03-01', false, false, '2021-03-01', 'B-Series', 3, 'Quisque id justo sit amet sapien dignissim vestibulum.', 'TM 50 NFS', '2021-03-01', '2021-03-01', 'Available');
+
+insert into ROUTES (id, distance_in_km, from_location, notes, price_in_eur, price_in_ron, to_location, is_transit_route) VALUES (1, 400, 'TIMISOARA', null, 10, 75, 'BUDAPESTA', 1);
+insert into ROUTES (id, distance_in_km, from_location, notes, price_in_eur, price_in_ron, to_location, is_transit_route, return_route_id) VALUES (2, 400, 'BUDAPESTA', null, 10, 75, 'TIMISOARA', 1, 1);
+update ROUTES SET return_route_id = 2 WHERE id = 1;
+insert into ROUTES (id, distance_in_km, from_location, notes, price_in_eur, price_in_ron, to_location, is_transit_route) VALUES (3, 400, 'ARAD', null, 30, 150, 'BELGRAD', 1);
+insert into ROUTES (id, distance_in_km, from_location, notes, price_in_eur, price_in_ron, to_location, is_transit_route, return_route_id) VALUES (4, 400, 'BELGRAD', null, 30, 150, 'ARAD', 1, 3);
+update ROUTES SET return_route_id = 4 WHERE id = 3;
+insert into ROUTES (id, distance_in_km, from_location, notes, price_in_eur, price_in_ron, to_location, is_transit_route) VALUES (5, 100, 'TIMISOARA', null, 10, 50, 'ARAD', 0);
+insert into ROUTES (id, distance_in_km, from_location, notes, price_in_eur, price_in_ron, to_location, is_transit_route, return_route_id) VALUES (6, 100, 'ARAD', null, 10, 50, 'TIMISOARA', 0, 5);
+update ROUTES SET return_route_id = 6 WHERE id = 5;

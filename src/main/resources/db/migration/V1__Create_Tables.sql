@@ -33,6 +33,7 @@ create table cars (
     primary key (id)
 );
 
+
 create table routes (
    id bigint not null auto_increment,
    distance_in_km integer,
@@ -43,5 +44,34 @@ create table routes (
    to_location varchar(120),
    is_transit_route boolean not null default true,
    return_route_id bigint,
+
    primary key (id)
-)
+);
+
+ create table passengers (
+    id bigint not null auto_increment,
+    arrival_airport_location varchar(255),
+    arrival_date_time timestamp,
+    departure_date_time timestamp,
+    email varchar(40),
+    first_name varchar(120),
+    last_name varchar(12),
+    notes varchar(255),
+    paid_for_transfer bit not null,
+    payment_method varchar(255),
+    phone_number varchar(12),
+    pick_up_address varchar(255),
+    pick_up_date_time timestamp,
+    transport_type varchar(255),
+    route_id bigint,
+
+    primary key (id)
+);
+
+create table co_passengers (
+    id bigint not null auto_increment,
+    passenger_type varchar(255),
+    main_passenger_id bigint,
+
+    primary key (id)
+);

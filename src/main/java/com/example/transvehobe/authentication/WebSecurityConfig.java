@@ -47,7 +47,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .authorizeRequests().antMatchers("/transveho/auth/**").permitAll()
             .antMatchers("/transveho/cars/**").authenticated()
             .antMatchers("/transveho/users/**").authenticated()
-            .antMatchers("/transveho/routes/**").permitAll()
+            .antMatchers("/transveho/routes/**").authenticated()
+            .antMatchers("/transveho/passengers/**").authenticated()
             .anyRequest().authenticated();
 
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);

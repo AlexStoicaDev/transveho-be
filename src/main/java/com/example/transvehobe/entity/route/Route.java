@@ -1,9 +1,12 @@
 package com.example.transvehobe.entity.route;
 
+import com.example.transvehobe.entity.passenger.Passenger;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -12,6 +15,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
@@ -50,7 +54,7 @@ public class Route {
     @Size(max = 255)
     private String notes;
 
-    //    @JsonIgnore
-    //    @OneToMany(mappedBy = "route")
-    //    private List<Passenger> passengers;
+    @JsonIgnore
+    @OneToMany(mappedBy = "route")
+    private List<Passenger> passengers;
 }

@@ -9,9 +9,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -20,7 +18,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -37,8 +34,9 @@ public class Passenger {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "mainPassenger", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-    private List<CoPassenger> coPassengers;
+    private int numberOfAdults;
+    private int numberOfChildren;
+    private int numberOfInfants;
 
     @Email
     @NotBlank
@@ -59,20 +57,6 @@ public class Passenger {
     @JoinColumn(name = "route_id")
     private Route route;
 
-    private LocalDateTime pickUpDateTime;
-
-    private LocalDateTime departureDateTime;
-
-    private LocalDateTime arrivalDateTime;
-
-    @Size(max = 255)
-    private String arrivalAirportLocation;
-
-    @Size(max = 255)
-    private String pickUpAddress;
-
-    private boolean paidForTransfer;
-
     @Enumerated(EnumType.STRING)
     private PaymentMethod paymentMethod;
 
@@ -80,5 +64,27 @@ public class Passenger {
     private TransportType transportType;
 
     @Size(max = 255)
-    private String notes;
+    private String pickUpAddress;
+
+    @Size(max = 255)
+    private String destinationAddress;
+
+    private LocalDateTime pickUpDateTime;
+    private LocalDateTime flightDateTime;
+
+    @Size(max = 255)
+    private String flightDetails;
+
+    @Size(max = 255)
+    private String returnPickUpAddress;
+    @Size(max = 255)
+    private String returnDestinationAddress;
+
+    private LocalDateTime returnPickUpDateTime;
+
+    @Size(max = 255)
+    private String returnFlightDetails;
+
+    private boolean returnTransfer;
+    private boolean paidForTransfer;
 }

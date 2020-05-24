@@ -1,8 +1,6 @@
 package com.example.transvehobe.rest;
 
-import com.example.transvehobe.common.dto.CoPassengerDto;
 import com.example.transvehobe.common.dto.PassengerDto;
-import com.example.transvehobe.common.projection.CoPassengerProjection;
 import com.example.transvehobe.common.projection.CustomProjectionFactory;
 import com.example.transvehobe.common.projection.PassengerProjection;
 import com.example.transvehobe.entity.passenger.Passenger;
@@ -42,16 +40,6 @@ public class PassengersController {
         return factory.createProjection(PassengerProjection.class, passenger);
     }
 
-    @GetMapping("/co-passengers/{id}")
-    @PreAuthorize("hasAnyAuthority()")
-    public List<CoPassengerProjection> getCoPassengers(@PathVariable(value = "id") Long passengerId) {
-
-        return passengersService.getCoPassengers(passengerId)
-                                .stream()
-                                .map(coPassenger -> factory.createProjection(CoPassengerProjection.class, coPassenger))
-                                .collect(Collectors.toList());
-    }
-
     @GetMapping()
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('DISPATCHER')")
     public List<PassengerProjection> getAllPassengers() {
@@ -59,13 +47,6 @@ public class PassengersController {
                                 .stream()
                                 .map(passenger -> factory.createProjection(PassengerProjection.class, passenger))
                                 .collect(Collectors.toList());
-    }
-
-    @PostMapping("/co-passengers/{id}")
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('DISPATCHER')")
-    public CoPassengerProjection createCoPassenger(@PathVariable(value = "id") Long mainPassengerId,
-                                                   @RequestBody CoPassengerDto coPassengerDto) {
-        return factory.createProjection(CoPassengerProjection.class, passengersService.createCoPassenger(mainPassengerId, coPassengerDto));
     }
 
     @PostMapping()
@@ -87,17 +68,5 @@ public class PassengersController {
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('DISPATCHER')")
     public void deletePassenger(@PathVariable(value = "id") Long id) {
         passengersService.deletePassenger(id);
-    }
-
-    @DeleteMapping("/co-passengers/{id}")
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('DISPATCHER')")
-    public void deleteCoPassenger(@PathVariable(value = "id") Long id) {
-        passengersService.deleteCoPassenger(id);
-    }
-
-    @DeleteMapping("/co-passengers/all/{id}")
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('DISPATCHER')")
-    public void deleteAllCoPassengers(@PathVariable(value = "id") Long mainPassengerId) {
-        passengersService.deleteAllCoPassengers(mainPassengerId);
     }
 }

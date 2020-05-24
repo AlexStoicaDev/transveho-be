@@ -1,19 +1,13 @@
 package com.example.transvehobe.common.mappers;
 
-import com.example.transvehobe.common.dto.CoPassengerDto;
 import com.example.transvehobe.common.dto.PassengerDto;
-import com.example.transvehobe.common.enums.PassengerType;
 import com.example.transvehobe.common.enums.PaymentMethod;
 import com.example.transvehobe.common.enums.TransportType;
 import com.example.transvehobe.common.validators.Validator;
-import com.example.transvehobe.entity.passenger.CoPassenger;
 import com.example.transvehobe.entity.passenger.Passenger;
 import lombok.experimental.UtilityClass;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @UtilityClass
 public class PassengerMapper {
@@ -24,51 +18,56 @@ public class PassengerMapper {
         newPassenger.setLastName(passengerDto.getLastName());
         newPassenger.setFirstName(passengerDto.getFirstName());
         newPassenger.setPhoneNumber(passengerDto.getPhoneNumber());
-        newPassenger.setPickUpDateTime(passengerDto.getPickUpDateTime());
-        newPassenger.setDepartureDateTime(passengerDto.getDepartureDateTime());
-        newPassenger.setArrivalDateTime(passengerDto.getArrivalDateTime());
-        newPassenger.setArrivalAirportLocation(passengerDto.getArrivalAirportLocation());
-        newPassenger.setPickUpAddress(passengerDto.getPickUpAddress());
-        newPassenger.setPaidForTransfer(passengerDto.isPaidForTransfer());
+
         newPassenger.setPaymentMethod(PaymentMethod.valueOf(passengerDto.getPaymentMethod()));
         newPassenger.setTransportType(TransportType.valueOf(passengerDto.getTransportType()));
-        newPassenger.setNotes(passengerDto.getNotes());
-        newPassenger.setCoPassengers(mapCoPassengerDtoListToCoPassengerList(passengerDto.getCoPassengers(), newPassenger));
+
+        newPassenger.setPickUpAddress(passengerDto.getPickUpAddress());
+        newPassenger.setDestinationAddress(passengerDto.getDestinationAddress());
+        newPassenger.setPickUpDateTime(passengerDto.getPickUpDateTime());
+        newPassenger.setFlightDateTime(passengerDto.getFlightDateTime());
+        newPassenger.setFlightDetails(passengerDto.getFlightDetails());
+
+        newPassenger.setReturnPickUpAddress(passengerDto.getReturnPickUpAddress());
+        newPassenger.setReturnDestinationAddress(passengerDto.getReturnDestinationAddress());
+        newPassenger.setReturnPickUpDateTime(passengerDto.getReturnPickUpDateTime());
+        newPassenger.setReturnFlightDetails(passengerDto.getReturnFlightDetails());
+
+        newPassenger.setReturnTransfer(passengerDto.isReturnTransfer());
+        newPassenger.setPaidForTransfer(passengerDto.isPaidForTransfer());
+
+        newPassenger.setNumberOfAdults(passengerDto.getNumberOfAdults());
+        newPassenger.setNumberOfChildren(passengerDto.getNumberOfChildren());
+        newPassenger.setNumberOfInfants(passengerDto.getNumberOfInfants());
+
         return newPassenger;
     }
 
-    public List<CoPassenger> mapCoPassengerDtoListToCoPassengerList(List<CoPassengerDto> coPassengerDtos, Passenger mainPassenger) {
-        if (coPassengerDtos != null) {
-            return coPassengerDtos.stream()
-                                  .map(coPassengerDto -> mapCoPassengerDtoToCoPassengerEntity(coPassengerDto, mainPassenger))
-                                  .collect(Collectors.toList());
-        }
-        return new ArrayList<>();
-    }
 
-    public CoPassenger mapCoPassengerDtoToCoPassengerEntity(CoPassengerDto coPassengerDto, Passenger mainPassenger) {
-        CoPassenger newCoPassenger = new CoPassenger();
-        // should set new Passenger?
-        newCoPassenger.setMainPassenger(mainPassenger);
-        newCoPassenger.setPassengerType(PassengerType.valueOf(coPassengerDto.getPassengerType()));
-        return newCoPassenger;
-    }
-
+    //TODO add proper validation for fields for all entities
     //TODO create a builder pattern
     public Passenger updatePassenger(Passenger passenger, PassengerDto passengerDto) {
         updateEmail(passenger, passengerDto.getEmail());
         updateLastName(passenger, passengerDto.getLastName());
         updateFirstName(passenger, passengerDto.getFirstName());
         updatePhoneNumber(passenger, passengerDto.getPhoneNumber());
-        updatePickUpDateTime(passenger, passengerDto.getPickUpDateTime());
-        updateDepartureDateTime(passenger, passengerDto.getDepartureDateTime());
-        updateArrivalDateTime(passenger, passengerDto.getArrivalDateTime());
-        updateArrivalAirportLocation(passenger, passengerDto.getArrivalAirportLocation());
-        updatePickUpAddress(passenger, passengerDto.getPickUpAddress());
-        updatePaidForTransfer(passenger, passengerDto.isPaidForTransfer());
         updatePaymentMethod(passenger, passengerDto.getPaymentMethod());
         updateTransportType(passenger, passengerDto.getTransportType());
-        updateNotes(passenger, passengerDto.getNotes());
+        updatePickUpAddress(passenger, passengerDto.getPickUpAddress());
+        updateDestinationAddress(passenger, passengerDto.getDestinationAddress());
+        updatePickUpDateTime(passenger, passengerDto.getPickUpDateTime());
+        updateFlightDateTime(passenger, passengerDto.getFlightDateTime());
+        updateFlightDetails(passenger, passengerDto.getFlightDetails());
+        updateReturnPickUpAddress(passenger, passengerDto.getReturnPickUpAddress());
+        updateReturnDestinationAddress(passenger, passengerDto.getReturnDestinationAddress());
+        updateReturnPickUpDateTime(passenger, passengerDto.getReturnPickUpDateTime());
+        updateReturnFlightDetails(passenger, passengerDto.getReturnFlightDetails());
+        updateReturnTransfer(passenger, passengerDto.isReturnTransfer());
+        updatePaidForTransfer(passenger, passengerDto.isPaidForTransfer());
+        passenger.setNumberOfInfants(passengerDto.getNumberOfInfants());
+        passenger.setNumberOfChildren(passengerDto.getNumberOfChildren());
+        passenger.setNumberOfAdults(passengerDto.getNumberOfAdults());
+
         return passenger;
     }
 
@@ -96,42 +95,6 @@ public class PassengerMapper {
         }
     }
 
-    private void updatePickUpDateTime(Passenger passenger, LocalDateTime newPickUpDateTime) {
-        if (Validator.isLocalDateTimePropertyValidForUpdate(passenger.getPickUpDateTime(), newPickUpDateTime)) {
-            passenger.setPickUpDateTime(newPickUpDateTime);
-        }
-    }
-
-    private void updateDepartureDateTime(Passenger passenger, LocalDateTime newDepartureDateTime) {
-        if (Validator.isLocalDateTimePropertyValidForUpdate(passenger.getDepartureDateTime(), newDepartureDateTime)) {
-            passenger.setDepartureDateTime(newDepartureDateTime);
-        }
-    }
-
-    private void updateArrivalDateTime(Passenger passenger, LocalDateTime newArrivalDateTime) {
-        if (Validator.isLocalDateTimePropertyValidForUpdate(passenger.getArrivalDateTime(), newArrivalDateTime)) {
-            passenger.setArrivalDateTime(newArrivalDateTime);
-        }
-    }
-
-    private void updateArrivalAirportLocation(Passenger passenger, String newArrivalAirportLocation) {
-        if (Validator.isStringPropertyValidForUpdate(passenger.getArrivalAirportLocation(), newArrivalAirportLocation)) {
-            passenger.setArrivalAirportLocation(newArrivalAirportLocation);
-        }
-    }
-
-    private void updatePickUpAddress(Passenger passenger, String newPickUpAddress) {
-        if (Validator.isStringPropertyValidForUpdate(passenger.getPickUpAddress(), newPickUpAddress)) {
-            passenger.setPickUpAddress(newPickUpAddress);
-        }
-    }
-
-    private void updatePaidForTransfer(Passenger passenger, boolean newPaidForTransfer) {
-
-        passenger.setPaidForTransfer(newPaidForTransfer);
-
-    }
-
     private void updatePaymentMethod(Passenger passenger, String newPaymentMethod) {
         if (Validator.isStringPropertyValidForUpdate(passenger.getPaymentMethod().toString(), newPaymentMethod)) {
             passenger.setPaymentMethod(PaymentMethod.valueOf(newPaymentMethod));
@@ -144,9 +107,65 @@ public class PassengerMapper {
         }
     }
 
-    private void updateNotes(Passenger passenger, String newNotes) {
-        if (Validator.isStringPropertyValidForUpdate(passenger.getNotes(), newNotes)) {
-            passenger.setNotes(newNotes);
+    private void updatePickUpAddress(Passenger passenger, String newPickUpAddress) {
+        if (Validator.isStringPropertyValidForUpdate(passenger.getPickUpAddress(), newPickUpAddress)) {
+            passenger.setPickUpAddress(newPickUpAddress);
         }
+    }
+
+    private void updateDestinationAddress(Passenger passenger, String newDestinationAddress) {
+        if (Validator.isStringPropertyValidForUpdate(passenger.getDestinationAddress(), newDestinationAddress)) {
+            passenger.setDestinationAddress(newDestinationAddress);
+        }
+    }
+
+    private void updatePickUpDateTime(Passenger passenger, LocalDateTime newPickUpDateTime) {
+        if (Validator.isLocalDateTimePropertyValidForUpdate(passenger.getPickUpDateTime(), newPickUpDateTime)) {
+            passenger.setPickUpDateTime(newPickUpDateTime);
+        }
+    }
+
+    private void updateFlightDateTime(Passenger passenger, LocalDateTime newFlightDateTime) {
+        if (Validator.isLocalDateTimePropertyValidForUpdate(passenger.getFlightDateTime(), newFlightDateTime)) {
+            passenger.setFlightDateTime(newFlightDateTime);
+        }
+    }
+
+    private void updateFlightDetails(Passenger passenger, String newFlightDetails) {
+        if (Validator.isStringPropertyValidForUpdate(passenger.getFlightDetails(), newFlightDetails)) {
+            passenger.setFlightDetails(newFlightDetails);
+        }
+    }
+
+    private void updateReturnPickUpAddress(Passenger passenger, String newReturnPickUpAddress) {
+        if (Validator.isStringPropertyValidForUpdate(passenger.getReturnPickUpAddress(), newReturnPickUpAddress)) {
+            passenger.setReturnPickUpAddress(newReturnPickUpAddress);
+        }
+    }
+
+    private void updateReturnDestinationAddress(Passenger passenger, String newReturnDestinationAddress) {
+        if (Validator.isStringPropertyValidForUpdate(passenger.getReturnDestinationAddress(), newReturnDestinationAddress)) {
+            passenger.setReturnDestinationAddress(newReturnDestinationAddress);
+        }
+    }
+
+    private void updateReturnPickUpDateTime(Passenger passenger, LocalDateTime newReturnPickUpDateTime) {
+        if (Validator.isLocalDateTimePropertyValidForUpdate(passenger.getReturnPickUpDateTime(), newReturnPickUpDateTime)) {
+            passenger.setReturnPickUpDateTime(newReturnPickUpDateTime);
+        }
+    }
+
+    private void updateReturnFlightDetails(Passenger passenger, String newReturnFlightDetails) {
+        if (Validator.isStringPropertyValidForUpdate(passenger.getReturnFlightDetails(), newReturnFlightDetails)) {
+            passenger.setReturnFlightDetails(newReturnFlightDetails);
+        }
+    }
+
+    private void updateReturnTransfer(Passenger passenger, boolean newReturnTransfer) {
+        passenger.setReturnTransfer(newReturnTransfer);
+    }
+
+    private void updatePaidForTransfer(Passenger passenger, boolean newPaidForTransfer) {
+        passenger.setPaidForTransfer(newPaidForTransfer);
     }
 }

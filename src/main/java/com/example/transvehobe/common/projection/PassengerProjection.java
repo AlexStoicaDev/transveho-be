@@ -13,16 +13,13 @@ public interface PassengerProjection {
 
     Long getId();
 
-    @Value("#{target.coPassengers.size()}")
+    @Value("#{target.numberOfAdults+target.numberOfChildren+target.numberOfInfants}")
     int getNumberOfCoPassengers();
 
-    @Value("#{target.coPassengers.?[passengerType == T(com.example.transvehobe.common.enums.PassengerType).Adult].size()}")
     int getNumberOfAdults();
 
-    @Value("#{target.coPassengers.?[passengerType == T(com.example.transvehobe.common.enums.PassengerType).Child].size()}")
     int getNumberOfChildren();
 
-    @Value("#{target.coPassengers.?[passengerType == T(com.example.transvehobe.common.enums.PassengerType).Infant].size()}")
     int getNumberOfInfants();
 
     String getEmail();
@@ -36,21 +33,29 @@ public interface PassengerProjection {
     @Value("#{target.route?.id}")
     Long getRouteId();
 
-    LocalDateTime getPickUpDateTime();
-
-    LocalDateTime getDepartureDateTime();
-
-    LocalDateTime getArrivalDateTime();
-
-    String getArrivalAirportLocation();
-
-    String getPickUpAddress();
-
-    boolean getPaidForTransfer();
-
     PaymentMethod getPaymentMethod();
 
     TransportType getTransportType();
 
-    String getNotes();
+    String getPickUpAddress();
+
+    String getDestinationAddress();
+
+    LocalDateTime getPickUpDateTime();
+
+    LocalDateTime getFlightDateTime();
+
+    String getFlightDetails();
+
+    String getReturnPickUpAddress();
+
+    String getReturnDestinationAddress();
+
+    LocalDateTime getReturnPickUpDateTime();
+
+    String getReturnFlightDetails();
+
+    boolean getReturnTransfer();
+
+    boolean getPaidForTransfer();
 }

@@ -1,11 +1,13 @@
 package com.example.transvehobe.entity.route;
 
 import com.example.transvehobe.entity.passenger.Passenger;
+import com.example.transvehobe.entity.transfer.Transfer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -57,4 +59,8 @@ public class Route {
     @JsonIgnore
     @OneToMany(mappedBy = "route")
     private List<Passenger> passengers;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "route")
+    private List<Transfer> transfers = new ArrayList<>();
 }

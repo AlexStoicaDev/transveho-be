@@ -1,6 +1,7 @@
 package com.example.transvehobe.service;
 
 import com.example.transvehobe.common.dto.UserDto;
+import com.example.transvehobe.common.enums.UserStatus;
 import com.example.transvehobe.common.mappers.UserMapper;
 import com.example.transvehobe.entity.role.UserRole;
 import com.example.transvehobe.entity.user.User;
@@ -37,6 +38,10 @@ public class UsersService {
 
     public List<User> getAllDrivers() {
         return userRepository.findAllByRole(UserRole.DRIVER);
+    }
+
+    public List<User> getAllAvailableDrivers() {
+        return userRepository.findAllByRoleAndUserStatus(UserRole.DRIVER, UserStatus.Available);
     }
 
     public List<User> getAllUsers() {

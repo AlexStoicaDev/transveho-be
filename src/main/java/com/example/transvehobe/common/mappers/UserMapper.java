@@ -44,4 +44,20 @@ public class UserMapper {
         }
         return user;
     }
+
+    public UserDto mapUserEntityToUserDot(User user) {
+        final UserDto userDto = new UserDto();
+        userDto.setId(user.getId());
+        userDto.setSpokenLanguage(user.getSpokenLanguage().toString());
+        userDto.setDrivingLicenseCategory(user.getDrivingLicenseCategory().toString());
+        userDto.setUserStatus(user.getUserStatus().toString());
+        userDto.setPhoneNumber(user.getPhoneNumber());
+        userDto.setFirstName(user.getFirstName());
+        userDto.setLastName(user.getLastName());
+        userDto.setRole(user.getRole().toString());
+        userDto.setEmail(user.getEmail());
+        userDto.setUsername(user.getUsername());
+        userDto.setPassword(user.getPassword());
+        return userDto;
+    }
 }

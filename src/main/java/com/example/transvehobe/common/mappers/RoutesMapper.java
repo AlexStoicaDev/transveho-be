@@ -30,4 +30,17 @@ public class RoutesMapper {
         route.setTransitRoute(routeDto.isTransitRoute());
         return route;
     }
+
+    public RouteDto mapRouteEntityToRouteDto(Route route) {
+        final RouteDto routeDto = new RouteDto();
+
+        routeDto.setId(route.getId());
+        routeDto.setToLocation(route.getToLocation());
+        routeDto.setFromLocation(route.getFromLocation());
+        routeDto.setDistanceInKm(route.getDistanceInKm());
+        routeDto.setPriceInRon(route.getPriceInRon());
+        routeDto.setPriceInEur(route.getPriceInEur());
+        routeDto.setNotes(route.getNotes());
+        return routeDto;
+    }
 }

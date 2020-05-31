@@ -7,6 +7,7 @@ import java.time.LocalDate;
 @Data
 public class CarDto {
 
+    private long id;
     private String plateNumber;
     private String model;
     private Integer numberOfSeats;

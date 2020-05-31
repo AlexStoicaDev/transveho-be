@@ -43,6 +43,39 @@ public class PassengerMapper {
         return newPassenger;
     }
 
+    public PassengerDto mapPassengerEntityToPassengerDto(Passenger passenger) {
+        final PassengerDto passengerDto = new PassengerDto();
+
+        passengerDto.setId(passenger.getId());
+        passengerDto.setEmail(passenger.getEmail());
+        passengerDto.setLastName(passenger.getLastName());
+        passengerDto.setFirstName(passenger.getFirstName());
+        passengerDto.setPhoneNumber(passenger.getPhoneNumber());
+
+        passengerDto.setPaymentMethod(passenger.getPaymentMethod().toString());
+        passengerDto.setTransportType(passenger.getTransportType().toString());
+
+        passengerDto.setPickUpAddress(passenger.getPickUpAddress());
+        passengerDto.setDestinationAddress(passenger.getDestinationAddress());
+        passengerDto.setPickUpDateTime(passenger.getPickUpDateTime());
+        passengerDto.setFlightDateTime(passenger.getFlightDateTime());
+        passengerDto.setFlightDetails(passenger.getFlightDetails());
+
+        passengerDto.setReturnPickUpAddress(passenger.getReturnPickUpAddress());
+        passengerDto.setReturnDestinationAddress(passenger.getReturnDestinationAddress());
+        passengerDto.setReturnPickUpDateTime(passenger.getReturnPickUpDateTime());
+        passengerDto.setReturnFlightDetails(passenger.getReturnFlightDetails());
+
+        passengerDto.setReturnTransfer(passenger.isReturnTransfer());
+        passengerDto.setPaidForTransfer(passenger.isPaidForTransfer());
+
+        passengerDto.setNumberOfAdults(passenger.getNumberOfAdults());
+        passengerDto.setNumberOfChildren(passenger.getNumberOfChildren());
+        passengerDto.setNumberOfInfants(passenger.getNumberOfInfants());
+
+        return passengerDto;
+    }
+
 
     //TODO add proper validation for fields for all entities
     //TODO create a builder pattern

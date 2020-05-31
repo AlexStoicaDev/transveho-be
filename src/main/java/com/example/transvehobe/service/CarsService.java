@@ -1,6 +1,7 @@
 package com.example.transvehobe.service;
 
 import com.example.transvehobe.common.dto.CarDto;
+import com.example.transvehobe.common.enums.CarStatus;
 import com.example.transvehobe.common.mappers.CarMapper;
 import com.example.transvehobe.entity.car.Car;
 import com.example.transvehobe.entity.car.CarRepository;
@@ -22,8 +23,16 @@ public class CarsService {
         return carRepository.findByPlateNumber(plateNumber);
     }
 
+    public Optional<Car> getCarById(long id) {
+        return carRepository.findById(id);
+    }
+
     public List<Car> getAllCars() {
         return this.carRepository.findAll();
+    }
+
+    public List<Car> getAvailableCars() {
+        return this.carRepository.getAllByStatus(CarStatus.Available);
     }
 
     public Optional<Car> createCar(CarDto carDto) {

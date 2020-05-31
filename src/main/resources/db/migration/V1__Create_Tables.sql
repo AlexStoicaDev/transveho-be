@@ -49,29 +49,38 @@ create table routes (
 );
 
  create table passengers (
-    id bigint not null auto_increment,
-    number_of_adults integer default 0,
-    number_of_children integer default 0,
-    number_of_infants integer default 0,
-    destination_address varchar(255),
-    email varchar(40),
-    first_name varchar(50),
-    flight_date_time timestamp,
-    flight_details varchar(255),
-    last_name varchar(50),
-    paid_for_transfer bit not null,
-    payment_method varchar(255),
-    phone_number varchar(12),
-    pick_up_address varchar(255),
-    pick_up_date_time timestamp,
-    return_destination_address varchar(255),
-    return_flight_details varchar(255),
-    return_pick_up_address varchar(255),
-    return_pick_up_date_time timestamp,
-    return_transfer bit not null,
+   id bigint not null auto_increment,
+   number_of_adults integer default 0,
+   number_of_children integer default 0,
+   number_of_infants integer default 0,
+   destination_address varchar(255),
+   email varchar(40),
+   first_name varchar(50),
+   flight_date_time timestamp,
+   flight_details varchar(255),
+   last_name varchar(50),
+   paid_for_transfer bit not null,
+   payment_method varchar(255),
+   phone_number varchar(12),
+   pick_up_address varchar(255),
+   pick_up_date_time timestamp,
+   return_destination_address varchar(255),
+   return_flight_details varchar(255),
+   return_pick_up_address varchar(255),
+   return_pick_up_date_time timestamp,
+   return_transfer bit not null,
    transport_type varchar(255),
    route_id bigint,
+   transfer_id bigint,
 
    primary key (id)
 );
 
+create table transfers (
+   id bigint not null auto_increment,
+   car_id bigint,
+   driver_id bigint,
+   route_id bigint,
+
+   primary key (id)
+);

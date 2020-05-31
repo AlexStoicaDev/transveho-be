@@ -4,9 +4,14 @@ import com.example.transvehobe.common.enums.Language;
 import com.example.transvehobe.common.enums.UserStatus;
 import com.example.transvehobe.entity.drivingLicense.DrivingLicenseCategory;
 import com.example.transvehobe.entity.role.UserRole;
+import com.example.transvehobe.entity.transfer.Transfer;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -14,6 +19,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -63,4 +69,8 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     private Language spokenLanguage;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "driver")
+    private List<Transfer> transfers = new ArrayList<>();
 }

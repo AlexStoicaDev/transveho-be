@@ -48,4 +48,22 @@ public class CarMapper {
         return car;
     }
 
+    public CarDto mapCarEntityToCarDto(Car car) {
+        final CarDto carDto = new CarDto();
+        carDto.setId(car.getId());
+        carDto.setPlateNumber(car.getPlateNumber());
+        carDto.setModel(car.getModel());
+        carDto.setNumberOfSeats(car.getNumberOfSeats());
+        carDto.setChassisNumber(car.getChassisNumber());
+        carDto.setEngineType(car.getEngineType().toString());
+        carDto.setRented(car.isRented());
+        carDto.setInTransit(car.isInTransit());
+        carDto.setStatus(car.getStatus().toString());
+        carDto.setItpExpirationDate(car.getItpExpirationDate());
+        carDto.setRovignetteExpirationDate(car.getRovignetteExpirationDate());
+        carDto.setHuvignetteExpirationDate(car.getHuvignetteExpirationDate());
+        carDto.setRcaExpirationDate(car.getRcaExpirationDate());
+        carDto.setOthers(car.getOthers());
+        return carDto;
+    }
 }

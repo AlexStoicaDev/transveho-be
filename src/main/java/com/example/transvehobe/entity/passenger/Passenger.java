@@ -3,6 +3,7 @@ package com.example.transvehobe.entity.passenger;
 import com.example.transvehobe.common.enums.PaymentMethod;
 import com.example.transvehobe.common.enums.TransportType;
 import com.example.transvehobe.entity.route.Route;
+import com.example.transvehobe.entity.transfer.Transfer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -87,4 +88,9 @@ public class Passenger {
 
     private boolean returnTransfer;
     private boolean paidForTransfer;
+
+    @JsonIgnore
+    @ManyToOne()
+    @JoinColumn(name = "transfer_id")
+    private Transfer transfer;
 }

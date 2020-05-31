@@ -1,5 +1,6 @@
 package com.example.transvehobe.entity.user;
 
+import com.example.transvehobe.common.enums.UserStatus;
 import com.example.transvehobe.entity.role.UserRole;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -17,6 +18,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByUsernameOrEmail(String username, String email);
 
     List<User> findAllByRole(UserRole role);
+
+    List<User> findAllByRoleAndUserStatus(UserRole role, UserStatus userStatus);
 
     void deleteByUsername(String username);
 }

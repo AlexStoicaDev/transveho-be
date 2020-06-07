@@ -44,6 +44,9 @@ public class PassengerMapper {
     }
 
     public PassengerDto mapPassengerEntityToPassengerDto(Passenger passenger) {
+
+        //TODO use builder from lombok
+
         final PassengerDto passengerDto = new PassengerDto();
 
         passengerDto.setId(passenger.getId());

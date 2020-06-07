@@ -157,4 +157,6 @@ public class TransferService {
         });
         newTransfer.setPassengers(passengers);
     }
+
+    //TODO convert properties file to yml ant hide important properties
 }

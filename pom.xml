@@ -9,8 +9,8 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.example</groupId>
-    <artifactId>transvehobe</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <artifactId>transveho</artifactId>
+    <version>1-SNAPSHOT</version>
     <name>transveho</name>
     <description>Backend for travel web app Transveho</description>
 

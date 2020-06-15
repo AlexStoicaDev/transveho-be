@@ -29,4 +29,5 @@ public class PassengerDto {
     private String returnFlightDetails;
     private boolean returnTransfer;
     private boolean paidForTransfer;
+    private String status;
 }

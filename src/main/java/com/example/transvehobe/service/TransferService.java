@@ -2,6 +2,7 @@ package com.example.transvehobe.service;
 
 import com.example.transvehobe.common.dto.CreateTransferDataDto;
 import com.example.transvehobe.common.dto.CreateTransferStepperDataDto;
+import com.example.transvehobe.common.enums.PassengerStatus;
 import com.example.transvehobe.common.mappers.CarMapper;
 import com.example.transvehobe.common.mappers.PassengerMapper;
 import com.example.transvehobe.common.mappers.RoutesMapper;
@@ -44,37 +45,14 @@ public class TransferService {
     public CreateTransferStepperDataDto getCreateTransferStepperData(List<Long> selectedPassengersIds, long routeId) {
 
         final CreateTransferStepperDataDto createTransferStepperDataDto = new CreateTransferStepperDataDto();
-        setAvailableDrivers(createTransferStepperDataDto);
-        setAvailableCars(createTransferStepperDataDto);
-        setSelectedRoute(createTransferStepperDataDto, routeId);
         setSelectedPassengers(createTransferStepperDataDto, selectedPassengersIds);
         setNumberOfPassengers(createTransferStepperDataDto);
+        setAvailableDrivers(createTransferStepperDataDto);
+        setAvailableCars(createTransferStepperDataDto,
+                         createTransferStepperDataDto.getTotalNumberOfAdults() + createTransferStepperDataDto.getTotalNumberOfChildren()
+                             + createTransferStepperDataDto.getTotalNumberOfInfants());
+        setSelectedRoute(createTransferStepperDataDto, routeId);
         return createTransferStepperDataDto;
-    }
-
-    //TODO should be moved to a mapper
-    private void setAvailableDrivers(CreateTransferStepperDataDto createTransferStepperDataDto) {
-        createTransferStepperDataDto.setAvailableDrivers(this.usersService.getAllAvailableDrivers()
-                                                                          .stream()
-                                                                          .map(UserMapper::mapUserEntityToUserDot)
-                                                                          .collect(Collectors.toList()));
-    }
-
-    private void setAvailableCars(CreateTransferStepperDataDto createTransferStepperDataDto) {
-        createTransferStepperDataDto.setAvailableCars(this.carsService.getAvailableCars()
-                                                                      .stream()
-                                                                      .map(CarMapper::mapCarEntityToCarDto)
-                                                                      .collect(Collectors.toList()));
-    }
-
-    private void setSelectedRoute(CreateTransferStepperDataDto createTransferStepperDataDto, long routeId) {
-        createTransferStepperDataDto.setSelectedRoute(RoutesMapper.mapRouteEntityToRouteDto(this.routesService.getRouteById(routeId)
-                                                                                                              .orElseThrow(
-                                                                                                                  () -> new EntityNotFoundException(
-                                                                                                                      "Route with id: "
-                                                                                                                          + routeId
-                                                                                                                          + " was not found in db")
-                                                                                                              )));
     }
 
     private void setSelectedPassengers(CreateTransferStepperDataDto createTransferStepperDataDto, List<Long> selectedPassengersIds) {
@@ -101,6 +79,32 @@ public class TransferService {
         createTransferStepperDataDto.setTotalNumberOfAdults(totalNumberOfAdults.get());
         createTransferStepperDataDto.setTotalNumberOfChildren(totalNumberOfChildren.get());
         createTransferStepperDataDto.setTotalNumberOfInfants(totalNumberOfInfants.get());
+    }
+
+    //TODO should be moved to a mapper
+    private void setAvailableDrivers(CreateTransferStepperDataDto createTransferStepperDataDto) {
+        createTransferStepperDataDto.setAvailableDrivers(this.usersService.getAllAvailableDrivers()
+                                                                          .stream()
+                                                                          .map(UserMapper::mapUserEntityToUserDot)
+                                                                          .collect(Collectors.toList()));
+    }
+
+    private void setAvailableCars(CreateTransferStepperDataDto createTransferStepperDataDto, Integer numberOfPassengers) {
+        createTransferStepperDataDto.setAvailableCars(this.carsService.getAvailableCarsWithEnoughSeats(
+            numberOfPassengers)
+                                                                      .stream()
+                                                                      .map(CarMapper::mapCarEntityToCarDto)
+                                                                      .collect(Collectors.toList()));
+    }
+
+    private void setSelectedRoute(CreateTransferStepperDataDto createTransferStepperDataDto, long routeId) {
+        createTransferStepperDataDto.setSelectedRoute(RoutesMapper.mapRouteEntityToRouteDto(this.routesService.getRouteById(routeId)
+                                                                                                              .orElseThrow(
+                                                                                                                  () -> new EntityNotFoundException(
+                                                                                                                      "Route with id: "
+                                                                                                                          + routeId
+                                                                                                                          + " was not found in db")
+                                                                                                              )));
     }
 
     public Transfer createTransfer(CreateTransferDataDto createTransferDataDto) {
@@ -152,6 +156,7 @@ public class TransferService {
             Passenger passenger = passengersService.getPassengerById(passengerId).orElseThrow(() -> new EntityNotFoundException(
                 "passenger with id: " + passengerId + " was not found in db"));
             passenger.setTransfer(newTransfer);
+            passenger.setStatus(PassengerStatus.Assigned);
             passengerRepository.save(passenger);
             passengers.add(passenger);
         });

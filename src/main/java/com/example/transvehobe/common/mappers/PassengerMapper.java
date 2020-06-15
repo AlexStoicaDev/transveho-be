@@ -1,6 +1,7 @@
 package com.example.transvehobe.common.mappers;
 
 import com.example.transvehobe.common.dto.PassengerDto;
+import com.example.transvehobe.common.enums.PassengerStatus;
 import com.example.transvehobe.common.enums.PaymentMethod;
 import com.example.transvehobe.common.enums.TransportType;
 import com.example.transvehobe.common.validators.Validator;
@@ -103,6 +104,7 @@ public class PassengerMapper {
         passenger.setNumberOfInfants(passengerDto.getNumberOfInfants());
         passenger.setNumberOfChildren(passengerDto.getNumberOfChildren());
         passenger.setNumberOfAdults(passengerDto.getNumberOfAdults());
+        passenger.setStatus(PassengerStatus.valueOf(passengerDto.getStatus()));
 
         return passenger;
     }

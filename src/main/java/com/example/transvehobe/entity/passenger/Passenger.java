@@ -1,5 +1,7 @@
 package com.example.transvehobe.entity.passenger;
 
+import com.example.transvehobe.common.enums.CarStatus;
+import com.example.transvehobe.common.enums.PassengerStatus;
 import com.example.transvehobe.common.enums.PaymentMethod;
 import com.example.transvehobe.common.enums.TransportType;
 import com.example.transvehobe.entity.route.Route;
@@ -93,4 +95,7 @@ public class Passenger {
     @ManyToOne()
     @JoinColumn(name = "transfer_id")
     private Transfer transfer;
+
+    @Enumerated(EnumType.STRING)
+    private PassengerStatus status;
 }

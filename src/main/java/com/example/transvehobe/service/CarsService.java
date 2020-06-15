@@ -31,8 +31,8 @@ public class CarsService {
         return this.carRepository.findAll();
     }
 
-    public List<Car> getAvailableCars() {
-        return this.carRepository.getAllByStatus(CarStatus.Available);
+    public List<Car> getAvailableCarsWithEnoughSeats(Integer numberOfPassengers) {
+        return this.carRepository.getAllByStatusAndNumberOfSeatsGreaterThanEqual(CarStatus.Available,numberOfPassengers);
     }
 
     public Optional<Car> createCar(CarDto carDto) {

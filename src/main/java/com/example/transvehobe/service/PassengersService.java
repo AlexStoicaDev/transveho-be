@@ -1,6 +1,7 @@
 package com.example.transvehobe.service;
 
 import com.example.transvehobe.common.dto.PassengerDto;
+import com.example.transvehobe.common.enums.PassengerStatus;
 import com.example.transvehobe.common.mappers.PassengerMapper;
 import com.example.transvehobe.entity.passenger.Passenger;
 import com.example.transvehobe.entity.passenger.PassengerRepository;
@@ -34,6 +35,7 @@ public class PassengersService {
                                             .orElseThrow(() -> new EntityNotFoundException(
                                                 "Route with id: " + passengerDto.getRouteId() + " was not found in the db"));
         newPassenger.setRoute(passengerRoute);
+        newPassenger.setStatus(PassengerStatus.NotAssigned);
         passengerRepository.save(newPassenger);
         return newPassenger;
     }

@@ -1,5 +1,6 @@
 package com.example.transvehobe.common.projection;
 
+import com.example.transvehobe.common.enums.PassengerStatus;
 import com.example.transvehobe.common.enums.PaymentMethod;
 import com.example.transvehobe.common.enums.TransportType;
 import com.example.transvehobe.entity.passenger.Passenger;
@@ -58,4 +59,6 @@ public interface PassengerProjection {
     boolean getReturnTransfer();
 
     boolean getPaidForTransfer();
+
+    PassengerStatus getStatus();
 }

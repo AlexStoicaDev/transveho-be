@@ -72,6 +72,7 @@ create table routes (
    transport_type varchar(255),
    route_id bigint,
    transfer_id bigint,
+   status varchar(255),
 
    primary key (id)
 );

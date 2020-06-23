@@ -7,14 +7,21 @@ import com.example.transvehobe.entity.role.UserRole;
 import com.example.transvehobe.entity.user.User;
 import com.example.transvehobe.entity.user.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.passay.CharacterData;
+import org.passay.CharacterRule;
+import org.passay.EnglishCharacterData;
+import org.passay.PasswordGenerator;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
+
+import static org.springframework.beans.TypeMismatchException.ERROR_CODE;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +29,7 @@ public class UsersService {
 
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
+    private final EmailService emailService;
 
     //TODO create custom exceptions
     public Optional<User> getUserById(Long id) {
@@ -37,7 +45,12 @@ public class UsersService {
     }
 
     public List<User> getAllDrivers() {
-        return userRepository.findAllByRole(UserRole.DRIVER);
+        final List<User> allDriversByRole = userRepository.findAllByRole(UserRole.DRIVER);
+        if(allDriversByRole.size()>0){
+            allDriversByRole.sort((a,b)->b.getUserStatus().compareTo(a.getUserStatus()));
+            return allDriversByRole;
+        }
+        return new ArrayList<>();
     }
 
     public List<User> getAllAvailableDrivers() {
@@ -54,11 +67,67 @@ public class UsersService {
 
     public User createUser(UserDto userDto) {
         User newUser = UserMapper.mapUserDtoToUserEntity(new User(), userDto);
-        newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
+        String userPassword = generatePassayPassword();
+        newUser.setPassword(passwordEncoder.encode(userPassword));
         userRepository.save(newUser);
-        return userRepository.findByUsername(newUser.getUsername())
-                             .orElseThrow(() -> new EntityNotFoundException(
-                                 "user with username: " + userDto.getUsername() + " was not found in db"));
+        final User userFromDb = userRepository.findByUsername(newUser.getUsername()).orElseThrow(() -> new EntityNotFoundException(
+                                            "user with username: " + userDto.getUsername() + " was not found in db"));
+        emailService.sendNewAccountEmail(newUser.getEmail(), newUser.getUsername(), newUser.getFirstName(), userPassword);
+        return userFromDb;
+    }
+
+    private String generatePassayPassword() {
+        PasswordGenerator passwordGenerator =
+            new PasswordGenerator();
+        return passwordGenerator
+            .generatePassword(10,
+                getSpecialCharactersRule(),
+                getLowerCaseRule(),
+                getUpperCaseRule(),
+                getDigitRule());
+    }
+
+    private CharacterRule getSpecialCharactersRule() {
+        CharacterData specialChars =
+            new CharacterData() {
+            public String getErrorCode() {
+                return ERROR_CODE;
+            }
+            public String getCharacters() {
+                return "!@#$%^&*()_+";
+            }
+        };
+        CharacterRule splCharRule =
+            new CharacterRule(specialChars);
+        splCharRule.setNumberOfCharacters(2);
+        return splCharRule;
+    }
+
+    private CharacterRule getLowerCaseRule() {
+        CharacterData lowerCaseChars =
+            EnglishCharacterData.LowerCase;
+        CharacterRule lowerCaseRule =
+            new CharacterRule(lowerCaseChars);
+        lowerCaseRule.setNumberOfCharacters(2);
+        return lowerCaseRule;
+    }
+
+    private CharacterRule getUpperCaseRule() {
+        CharacterData upperCaseChars =
+            EnglishCharacterData.UpperCase;
+        CharacterRule upperCaseRule =
+            new CharacterRule(upperCaseChars);
+        upperCaseRule.setNumberOfCharacters(2);
+        return upperCaseRule;
+    }
+
+    private CharacterRule getDigitRule() {
+        CharacterData digitChars =
+            EnglishCharacterData.Digit;
+        CharacterRule digitRule =
+            new CharacterRule(digitChars);
+        digitRule.setNumberOfCharacters(2);
+        return digitRule;
     }
 
     //TODO fix bug, fe receives result even with error
@@ -79,4 +148,6 @@ public class UsersService {
     public void deleteUser(String username) {
         userRepository.deleteByUsername(username);
     }
+
+
 }

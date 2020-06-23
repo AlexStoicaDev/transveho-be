@@ -88,8 +88,6 @@ public class UsersController {
     @PostMapping()
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<?> createUser(@RequestBody UserDto userDto) {
-        //TODO send password via email and let driver change it
-        userDto.setPassword("1234567");
         if (usersService.findUserByUsernameOrEmail(userDto.getUsername(), userDto.getEmail()).isPresent()) {
             return ResponseEntity
                 .badRequest()

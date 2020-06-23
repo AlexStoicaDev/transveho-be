@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,10 +45,17 @@ public class PassengersController {
     @GetMapping()
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('DISPATCHER')")
     public List<PassengerProjection> getAllPassengers() {
-        return passengersService.getAllPassengers()
-                                .stream()
-                                .map(passenger -> factory.createProjection(PassengerProjection.class, passenger))
-                                .collect(Collectors.toList());
+
+        final List<Passenger> allPassengers = passengersService.getAllPassengers();
+        if(allPassengers.size()>0){
+            allPassengers.sort((a, b) -> b.getStatus().compareTo(a.getStatus()));
+            return allPassengers
+                .stream()
+                .map(passenger -> factory.createProjection(PassengerProjection.class, passenger))
+                .collect(Collectors.toList());
+        }
+
+        return new ArrayList<>();
     }
 
     @PostMapping()

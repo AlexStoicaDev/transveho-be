@@ -2,7 +2,9 @@ package com.example.transvehobe.service;
 
 import com.example.transvehobe.common.dto.CreateTransferDataDto;
 import com.example.transvehobe.common.dto.CreateTransferStepperDataDto;
+import com.example.transvehobe.common.enums.CarStatus;
 import com.example.transvehobe.common.enums.PassengerStatus;
+import com.example.transvehobe.common.enums.UserStatus;
 import com.example.transvehobe.common.mappers.CarMapper;
 import com.example.transvehobe.common.mappers.PassengerMapper;
 import com.example.transvehobe.common.mappers.RoutesMapper;
@@ -20,9 +22,12 @@ import com.example.transvehobe.entity.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 import javax.persistence.EntityNotFoundException;
@@ -41,6 +46,40 @@ public class TransferService {
     private final RouteRepository routeRepository;
     private final CarRepository carRepository;
     private final PassengerRepository passengerRepository;
+
+    public List<Transfer> getAllTransfers() {
+        return transferRepository.findAll();
+    }
+
+    public Transfer getCurrentTransferForDriver(Long driverId) {
+        final List<Transfer> allTransfersForDriver = getAllTransfersForDriver(driverId);
+        final LocalDateTime now = LocalDateTime.now();
+
+        AtomicReference<LocalDateTime> transferDate = new AtomicReference<>();
+        AtomicReference<Transfer> currentTransfer = new AtomicReference<>();
+        allTransfersForDriver.forEach(transfer -> {
+            final Passenger passenger = transfer.getPassengers().get(0);
+            final LocalDateTime pickUpDateTime = passenger.getPickUpDateTime();
+            if (transferDate.get() != null && pickUpDateTime.getDayOfYear() >= now.getDayOfYear() && (
+                passenger.getStatus().equals(PassengerStatus.Assigned) || passenger.getStatus().equals(PassengerStatus.OnRoute))) {
+                transferDate.set(pickUpDateTime);
+                currentTransfer.set(transfer);
+            } else {
+                if (pickUpDateTime.getDayOfYear() >= now.getDayOfYear() && (
+                    passenger.getStatus().equals(PassengerStatus.Assigned) || passenger.getStatus().equals(PassengerStatus.OnRoute))) {
+                    transferDate.set(pickUpDateTime);
+                    currentTransfer.set(transfer);
+                }
+            }
+        });
+
+        return currentTransfer.get();
+    }
+
+    public List<Transfer> getAllTransfersForDriver(Long driverId) {
+        User driver = userRepository.findById(driverId).orElseThrow(() -> new EntityNotFoundException("entity was not found"));
+        return transferRepository.getTransfersByDriver(driver);
+    }
 
     public CreateTransferStepperDataDto getCreateTransferStepperData(List<Long> selectedPassengersIds, long routeId) {
 
@@ -161,6 +200,52 @@ public class TransferService {
             passengers.add(passenger);
         });
         newTransfer.setPassengers(passengers);
+    }
+
+    public void startTransfer(Long passengerId, Long carId, Long driverId) {
+        final Optional<Passenger> passengerById = passengerRepository.findById(passengerId);
+        if (passengerById.isPresent()) {
+            final Passenger passenger = passengerById.get();
+            passenger.setStatus(PassengerStatus.OnRoute);
+            passengerRepository.save(passenger);
+        }
+
+        final Optional<Car> carById = carRepository.findById(carId);
+        if (carById.isPresent()) {
+            final Car car = carById.get();
+            car.setStatus(CarStatus.OnRoute);
+            carRepository.save(car);
+        }
+
+        final Optional<User> driverById = userRepository.findById(driverId);
+        if (driverById.isPresent()) {
+            final User user = driverById.get();
+            user.setUserStatus(UserStatus.OnRoute);
+            userRepository.save(user);
+        }
+    }
+
+    public void finishTransfer(Long passengerId, Long carId, Long driverId) {
+        final Optional<Passenger> passengerById = passengerRepository.findById(passengerId);
+        if (passengerById.isPresent()) {
+            final Passenger passenger = passengerById.get();
+            passenger.setStatus(PassengerStatus.TransferDone);
+            passengerRepository.save(passenger);
+        }
+
+        final Optional<Car> carById = carRepository.findById(carId);
+        if (carById.isPresent()) {
+            final Car car = carById.get();
+            car.setStatus(CarStatus.Available);
+            carRepository.save(car);
+        }
+
+        final Optional<User> driverById = userRepository.findById(driverId);
+        if (driverById.isPresent()) {
+            final User user = driverById.get();
+            user.setUserStatus(UserStatus.Available);
+            userRepository.save(user);
+        }
     }
 
     //TODO convert properties file to yml ant hide important properties

@@ -1,5 +1,7 @@
 package com.example.transvehobe.common.enums;
 
+import org.hibernate.id.Assigned;
+
 public enum PassengerStatus {
-        TransferDone, OnRoute, Assigned, NotAssigned, Canceled
+        Canceled, TransferDone, OnRoute, Assigned, NotAssigned
 }

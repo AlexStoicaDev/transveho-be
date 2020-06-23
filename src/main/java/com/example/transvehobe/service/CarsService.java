@@ -8,6 +8,7 @@ import com.example.transvehobe.entity.car.CarRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,7 +29,12 @@ public class CarsService {
     }
 
     public List<Car> getAllCars() {
-        return this.carRepository.findAll();
+        final List<Car> allCars = this.carRepository.findAll();
+        if(allCars.size()>0){
+            allCars.sort((a,b)->b.getStatus().compareTo(a.getStatus()));
+            return allCars;
+        }
+        return new ArrayList<>();
     }
 
     public List<Car> getAvailableCarsWithEnoughSeats(Integer numberOfPassengers) {

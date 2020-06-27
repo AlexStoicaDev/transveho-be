@@ -15,7 +15,7 @@ public interface TransferProjection {
     @Value("#{target.car.plateNumber}")
     String getCarPlateNumber();
 
-    @Value("#{target.driver.lastName +' '+target.driver.firstName }")
+    @Value("#{target.driver.username}")
     String getDriverName();
 
     @Value("#{target.route.fromLocation +'-'+target.route.toLocation}")

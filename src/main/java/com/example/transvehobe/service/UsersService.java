@@ -62,7 +62,12 @@ public class UsersService {
     }
 
     public List<User> getAllDispatchers() {
-        return userRepository.findAllByRole(UserRole.DISPATCHER);
+        final List<User> allByRole = userRepository.findAllByRole(UserRole.DISPATCHER);
+        if(allByRole.size()>0){
+            allByRole.sort((a,b)->b.getUserStatus().compareTo(a.getUserStatus()));
+            return allByRole;
+        }
+        return new ArrayList<>();
     }
 
     public User createUser(UserDto userDto) {

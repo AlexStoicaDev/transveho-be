@@ -1,9 +1,7 @@
 package com.example.transvehobe.common.mappers;
 
 import com.example.transvehobe.common.dto.UserDto;
-import com.example.transvehobe.common.enums.Language;
 import com.example.transvehobe.common.enums.UserStatus;
-import com.example.transvehobe.entity.drivingLicense.DrivingLicenseCategory;
 import com.example.transvehobe.entity.role.UserRole;
 import com.example.transvehobe.entity.user.User;
 import lombok.experimental.UtilityClass;
@@ -13,10 +11,10 @@ public class UserMapper {
 
     public User mapUserDtoToUserEntity(User user, UserDto userDto) {
         if (userDto.getSpokenLanguage() != null) {
-            user.setSpokenLanguage(Language.valueOf(userDto.getSpokenLanguage()));
+            user.setSpokenLanguage(userDto.getSpokenLanguage());
         }
         if (userDto.getDrivingLicenseCategory() != null) {
-            user.setDrivingLicenseCategory(DrivingLicenseCategory.valueOf(userDto.getDrivingLicenseCategory()));
+            user.setDrivingLicenseCategory(userDto.getDrivingLicenseCategory());
         }
         if (userDto.getUserStatus() != null) {
             user.setUserStatus(UserStatus.valueOf(userDto.getUserStatus()));

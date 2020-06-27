@@ -1,8 +1,6 @@
 package com.example.transvehobe.common.projection;
 
-import com.example.transvehobe.common.enums.Language;
 import com.example.transvehobe.common.enums.UserStatus;
-import com.example.transvehobe.entity.drivingLicense.DrivingLicenseCategory;
 import com.example.transvehobe.entity.role.UserRole;
 import com.example.transvehobe.entity.user.User;
 import org.springframework.data.rest.core.config.Projection;
@@ -18,9 +16,9 @@ public interface UserProjection {
 
     UserRole getRole();
 
-    DrivingLicenseCategory getDrivingLicenseCategory();
+    String getDrivingLicenseCategory();
 
-    Language getSpokenLanguage();
+    String getSpokenLanguage();
 
     UserStatus getUserStatus();
 

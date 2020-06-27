@@ -1,8 +1,6 @@
 package com.example.transvehobe.entity.user;
 
-import com.example.transvehobe.common.enums.Language;
 import com.example.transvehobe.common.enums.UserStatus;
-import com.example.transvehobe.entity.drivingLicense.DrivingLicenseCategory;
 import com.example.transvehobe.entity.role.UserRole;
 import com.example.transvehobe.entity.transfer.Transfer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -64,11 +62,9 @@ public class User {
     @Enumerated(EnumType.STRING)
     private UserStatus userStatus;
 
-    @Enumerated(EnumType.STRING)
-    private DrivingLicenseCategory drivingLicenseCategory;
+    private String drivingLicenseCategory;
 
-    @Enumerated(EnumType.STRING)
-    private Language spokenLanguage;
+    private String spokenLanguage;
 
     @JsonIgnore
     @OneToMany(mappedBy = "driver")

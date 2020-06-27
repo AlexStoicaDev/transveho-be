@@ -47,8 +47,14 @@ public class TransferService {
     private final CarRepository carRepository;
     private final PassengerRepository passengerRepository;
 
-    public List<Transfer> getAllTransfers() {
-        return transferRepository.findAll();
+    public List<Transfer> getAllTransfers()
+    {
+        final List<Transfer> all = transferRepository.findAll();
+        if(all.size()>0){
+            all.sort((a,b)->b.getPassengers().get(0).getStatus().compareTo(a.getPassengers().get(0).getStatus()));
+            return all;
+        }
+        return new ArrayList<>();
     }
 
     public Transfer getCurrentTransferForDriver(Long driverId) {
@@ -78,7 +84,8 @@ public class TransferService {
 
     public List<Transfer> getAllTransfersForDriver(Long driverId) {
         User driver = userRepository.findById(driverId).orElseThrow(() -> new EntityNotFoundException("entity was not found"));
-        return transferRepository.getTransfersByDriver(driver);
+        final List<Transfer> transfersByDriver = transferRepository.getTransfersByDriver(driver);
+        return transfersByDriver;
     }
 
     public CreateTransferStepperDataDto getCreateTransferStepperData(List<Long> selectedPassengersIds, long routeId) {

@@ -85,7 +85,12 @@ public class TransferService {
     public List<Transfer> getAllTransfersForDriver(Long driverId) {
         User driver = userRepository.findById(driverId).orElseThrow(() -> new EntityNotFoundException("entity was not found"));
         final List<Transfer> transfersByDriver = transferRepository.getTransfersByDriver(driver);
-        return transfersByDriver;
+
+        if(transfersByDriver.size()>0){
+            transfersByDriver.sort((a,b)->b.getPassengers().get(0).getPickUpDateTime().compareTo(a.getPassengers().get(0).getPickUpDateTime()));
+            return transfersByDriver;
+        }
+        return new ArrayList<>();
     }
 
     public CreateTransferStepperDataDto getCreateTransferStepperData(List<Long> selectedPassengersIds, long routeId) {

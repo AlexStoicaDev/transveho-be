@@ -56,8 +56,8 @@ public class TransferController {
 
     @GetMapping("/{driverId}")
     // @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('DISPATCHER')")
-    public List<TransferProjection> getAllTransfersForDriver(@PathVariable(value = "driverId") Long driverId) {
-        return factory.createProjection(TransferProjection.class, transferService.getAllTransfersForDriver(driverId));
+    public List<CurrentTransfer> getAllTransfersForDriver(@PathVariable(value = "driverId") Long driverId) {
+        return factory.createProjection(CurrentTransfer.class, transferService.getAllTransfersForDriver(driverId));
     }
 
     @GetMapping("/current/{driverId}")
